@@ -1,0 +1,4 @@
+rule-engine==2.4.1
+PyYAML==5.4.1
+rich==9.10.0
+jsonschema==3.2.0

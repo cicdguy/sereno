@@ -1,0 +1,68 @@
+# rules.yaml
+#
+# Definitions for severity levels and rules
+---
+#  ____  ____  _  _  ____  ____  __  ____  _  _
+# / ___)(  __)/ )( \(  __)(  _ \(  )(_  _)( \/ )
+# \___ \ ) _) \ \/ / ) _)  )   / )(   )(   )  /
+# (____/(____) \__/ (____)(__\_)(__) (__) (__/
+severities:
+
+  # A suitable name or identifier for the severity level
+  LOW:
+
+    # A suitable description
+    description: Premonition  # Not exactly 'suitable', but you get the idea
+
+    # The color of the output message in standard out
+    color: white
+
+  MEDIUM:
+    description: It's getting worse
+    color: yellow
+  HIGH:
+    description: It's pretty bad
+    color: magenta
+  CRITICAL:
+    description: Urgent, needs immediate attention
+    color: red
+#  ____  _  _  __    ____  ____
+# (  _ \/ )( \(  )  (  __)/ ___)
+#  )   /) \/ (/ (_/\ ) _) \___ \
+# (__\_)\____/\____/(____)(____/
+rules:
+  # A name for the rule that triggers the alert
+  - name: Disk consumption exceeds 90%
+
+    # Detailed description of the rule
+    description: |
+      Send an alert when any server's `DiskUsedPercentage`
+      component exceeds 90%. Do not alert for inactive servers.
+
+    # Severity of the rule. See severity definitions above
+    severity: MEDIUM
+
+    # The condition as a rule engine expression that represents the rule
+    # The rule engine expression that follows the syntax described here:
+    # https://zerosteiner.github.io/rule-engine/
+    condition: component == "DiskUsedPercentage" and value >= 0.9 and active
+
+    # Component threshold. Used for vanity purposes, in the alert output.
+    # The actual threshold is already defined in the condition above.
+    threshold: 90%
+
+    # Set whether the alert should be triggered for a majority of the
+    # servier for the corresponding service. A majority would
+    # constitute more than 50% of servers for a given service.
+    majority: false
+
+  - name: 5 min load average exceeds 4.0
+    description: |
+      Send an alert when the majority of servers within a service exhibit
+      `Load5mAvg` with a value greater than 4.0 at the same time.
+      Do not include inactive servers when calculating majority.
+    severity: HIGH
+    condition: component == "Load5mAvg" and value >= 4.0 and active
+    threshold: 4.0
+    majority: true
+...
