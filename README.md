@@ -102,7 +102,7 @@ sereno sample.json
 
 #### Docker
 
-Simple mount the metrics data into the container and run it as below:
+Simply mount the metrics data into the container and run it as below:
 
 ```
 docker run -it --rm -v `pwd`/sample.json:/data/sample.json sereno /data/sample.json
